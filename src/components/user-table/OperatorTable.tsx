@@ -14,7 +14,8 @@ import {
   Box,
   TableSortLabel,
   Typography,
-  Divider
+  Divider,
+  TablePagination
 } from '@mui/material'
 import { getOperatorListAction } from '~/store/slices/users.slice'
 import { RootState } from '~/store'
@@ -33,6 +34,8 @@ const OperatorTable: React.FC = () => {
     key: 'name',
     direction: 'asc'
   })
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(5)
 
   useEffect(() => {
     dispatch(getOperatorListAction())
@@ -54,6 +57,17 @@ const OperatorTable: React.FC = () => {
           : 'asc'
     }))
   }, [])
+
+  const handlePageChange = (event: unknown, newPage: number) => {
+    setPage(newPage)
+  }
+
+  const handleRowsPerPageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
 
   const sortedData = useMemo(() => {
     if (!data) return null
@@ -86,11 +100,18 @@ const OperatorTable: React.FC = () => {
     )
   }, [sortedData, searchTerm])
 
+  const paginatedData = useMemo(() => {
+    if (!filteredData) return []
+    const start = page * rowsPerPage
+    const end = start + rowsPerPage
+    return filteredData.slice(start, end)
+  }, [filteredData, page, rowsPerPage])
+
   if (isLoading) return <div>Loading...</div>
   if (errors) return <div>Error: {JSON.stringify(errors)}</div>
 
   return (
-    <TableContainer component={Paper}>
+    <Paper>
       <Box p={2}>
         <TextField
           label='Пошук'
@@ -101,90 +122,103 @@ const OperatorTable: React.FC = () => {
           autoFocus
         />
       </Box>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>#</TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig.key === 'name'}
-                direction={sortConfig.direction}
-                onClick={() => handleSort('name')}
-              >
-                <Typography variant='tableHeader'>Користувач</Typography>
-              </TableSortLabel>
-            </TableCell>
-            <TableCell sx={{ width: '177px' }}>
-              <TableSortLabel
-                active={sortConfig.key === 'isWorking'}
-                direction={sortConfig.direction}
-                onClick={() => handleSort('isWorking')}
-              >
-                <Typography variant='tableHeader'>Працює</Typography>
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <TableSortLabel
-                active={sortConfig.key === 'createdAt'}
-                direction={sortConfig.direction}
-                onClick={() => handleSort('createdAt')}
-              >
-                <Typography variant='tableHeader'>
-                  Дата / Час створення
-                </Typography>
-              </TableSortLabel>
-            </TableCell>
-            <TableCell>
-              <Typography variant='tableHeader'>SMTP</Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredData?.map((operator, index) => (
-            <React.Fragment key={operator.id}>
-              {index > 0 && (
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortConfig.key === 'name'}
+                  direction={sortConfig.direction}
+                  onClick={() => handleSort('name')}
+                >
+                  <Typography variant='tableHeader'>Користувач</Typography>
+                </TableSortLabel>
+              </TableCell>
+              <TableCell sx={{ width: '177px' }}>
+                <TableSortLabel
+                  active={sortConfig.key === 'isWorking'}
+                  direction={sortConfig.direction}
+                  onClick={() => handleSort('isWorking')}
+                >
+                  <Typography variant='tableHeader'>Працює</Typography>
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortConfig.key === 'createdAt'}
+                  direction={sortConfig.direction}
+                  onClick={() => handleSort('createdAt')}
+                >
+                  <Typography variant='tableHeader'>
+                    Дата / Час створення
+                  </Typography>
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <Typography variant='tableHeader'>SMTP</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {paginatedData.map((operator, index) => (
+              <React.Fragment key={operator.id}>
+                {index > 0 && (
+                  <TableRow>
+                    <TableCell sx={styles.dividerCell} colSpan={5}>
+                      <Divider />
+                    </TableCell>
+                  </TableRow>
+                )}
                 <TableRow>
-                  <TableCell sx={styles.dividerCell} colSpan={5}>
-                    <Divider />
+                  <TableCell sx={styles.tableCellIndex}>
+                    <Typography
+                      sx={styles.tableCellTypographyIndex}
+                      variant='body2'
+                    >
+                      {page * rowsPerPage + index + 1}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={styles.avatarTableCell}>
+                    <Avatar src={operator.avatar} />
+                    <Typography variant='body2'>{operator.name}</Typography>
+                  </TableCell>
+                  <TableCell sx={styles.tableCellName}>
+                    <Checkbox checked={operator.isWorking} />
+                  </TableCell>
+                  <TableCell sx={styles.tableCellDate}>
+                    <Typography variant='body2'>
+                      {new Date(operator.createdAt).toLocaleString()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={styles.tableCellOperatorData}>
+                    <Typography
+                      noWrap
+                      sx={styles.tableCellOperatorDataTypography}
+                      variant='body2'
+                    >
+                      {operator.SMTP}
+                    </Typography>
                   </TableCell>
                 </TableRow>
-              )}
-              <TableRow>
-                <TableCell sx={styles.tableCellIndex}>
-                  <Typography
-                    sx={styles.tableCellTypographyIndex}
-                    variant='body2'
-                  >
-                    {index + 1}
-                  </Typography>
-                </TableCell>
-                <TableCell sx={styles.avatarTableCell}>
-                  <Avatar src={operator.avatar} />
-                  <Typography variant='body2'>{operator.name}</Typography>
-                </TableCell>
-                <TableCell sx={styles.tableCellName}>
-                  <Checkbox checked={operator.isWorking} />
-                </TableCell>
-                <TableCell sx={styles.tableCellDate}>
-                  <Typography variant='body2'>
-                    {new Date(operator.createdAt).toLocaleString()}
-                  </Typography>
-                </TableCell>
-                <TableCell sx={styles.tableCellOperatorData}>
-                  <Typography
-                    noWrap
-                    sx={styles.tableCellOperatorDataTypography}
-                    variant='body2'
-                  >
-                    {operator.SMTP}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            </React.Fragment>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+              </React.Fragment>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Divider sx={styles.dividerCell} />
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 20]}
+        component='div'
+        count={filteredData ? filteredData.length : 0}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
+    </Paper>
   )
 }
 
