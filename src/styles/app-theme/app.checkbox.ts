@@ -4,10 +4,11 @@ import palette from './app.pallete'
 export const checkbox = {
   styleOverrides: {
     root: {
-      color: palette.primary[300],
+      color: palette.basic.secondary,
       [`&.${checkboxClasses.checked}`]: {
-        color: palette.primary[700]
-      }
+        color: palette.basic.red
+      },
+      '& .MuiSvgIcon-root': { fontSize: 18 }
     }
   }
 }

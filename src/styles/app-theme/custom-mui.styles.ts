@@ -11,6 +11,7 @@ import { textField } from './app.textfield.js'
 import { menuItem } from './app.menu-item'
 import { menuList } from './app.menu-list'
 import { select } from './app.select'
+import { avatar } from './app.avatar'
 
 export const theme = createTheme({
   palette,
@@ -24,6 +25,7 @@ export const theme = createTheme({
     MuiTooltip: tooltip,
     MuiMenuItem: menuItem,
     MuiMenu: menuList,
-    MuiTableRow: table
+    MuiTableRow: table,
+    MuiAvatar: avatar
   }
 })
