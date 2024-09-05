@@ -93,10 +93,12 @@ const OperatorTable: React.FC = () => {
     <TableContainer component={Paper}>
       <Box p={2}>
         <TextField
-          label="Ім'я користувача"
+          label='Пошук'
           variant='outlined'
           value={searchTerm}
           onChange={handleSearch}
+          placeholder='Ім’я користувача...'
+          autoFocus
         />
       </Box>
       <Table>
@@ -112,7 +114,7 @@ const OperatorTable: React.FC = () => {
                 <Typography variant='tableHeader'>Користувач</Typography>
               </TableSortLabel>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ width: '177px' }}>
               <TableSortLabel
                 active={sortConfig.key === 'isWorking'}
                 direction={sortConfig.direction}
@@ -135,38 +137,50 @@ const OperatorTable: React.FC = () => {
             <TableCell>
               <Typography variant='tableHeader'>SMTP</Typography>
             </TableCell>
-            {/* <TableCell>
-              <Typography variant='tableHeader'>JBOD</Typography>
-            </TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
           {filteredData?.map((operator, index) => (
-            <TableRow key={operator.id}>
-              <TableCell>
-                <Typography variant='body2' sx={styles.tableCellIndex}>
-                  {index + 1}
-                </Typography>
-              </TableCell>
-              <TableCell sx={styles.avatarTableCell}>
-                <Avatar src={operator.avatar} />
-                <Typography variant='body2'>{operator.name}</Typography>
-              </TableCell>
-              <TableCell>
-                <Checkbox checked={operator.isWorking} />
-              </TableCell>
-              <TableCell>
-                <Typography variant='body2'>
-                  {new Date(operator.createdAt).toLocaleString()}
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant='body2'>{operator.SMTP}</Typography>
-              </TableCell>
-              {/* <TableCell>
-                <Typography variant='body2'>{operator.JBOD}</Typography>
-              </TableCell> */}
-            </TableRow>
+            <React.Fragment key={operator.id}>
+              {index > 0 && (
+                <TableRow>
+                  <TableCell sx={styles.dividerCell} colSpan={5}>
+                    <Divider />
+                  </TableCell>
+                </TableRow>
+              )}
+              <TableRow>
+                <TableCell sx={styles.tableCellIndex}>
+                  <Typography
+                    sx={styles.tableCellTypographyIndex}
+                    variant='body2'
+                  >
+                    {index + 1}
+                  </Typography>
+                </TableCell>
+                <TableCell sx={styles.avatarTableCell}>
+                  <Avatar src={operator.avatar} />
+                  <Typography variant='body2'>{operator.name}</Typography>
+                </TableCell>
+                <TableCell sx={styles.tableCellName}>
+                  <Checkbox checked={operator.isWorking} />
+                </TableCell>
+                <TableCell sx={styles.tableCellDate}>
+                  <Typography variant='body2'>
+                    {new Date(operator.createdAt).toLocaleString()}
+                  </Typography>
+                </TableCell>
+                <TableCell sx={styles.tableCellOperatorData}>
+                  <Typography
+                    noWrap
+                    sx={styles.tableCellOperatorDataTypography}
+                    variant='body2'
+                  >
+                    {operator.SMTP}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </React.Fragment>
           ))}
         </TableBody>
       </Table>
