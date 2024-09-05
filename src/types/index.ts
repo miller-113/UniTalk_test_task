@@ -1,1 +1,1 @@
-export * from '~/types/services/services.index'
+export * from '~/types/user.types'
