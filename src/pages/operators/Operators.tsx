@@ -4,7 +4,7 @@ import OperatorTable from "~/components/user-table/OperatorTable"
 
 const Operators = () => {
   return (
-    <Container sx={styles.container}>
+    <Container fixed sx={styles.container}>
       <Typography variant="h4">Оператори</Typography>
       <OperatorTable/>
     </Container>
