@@ -4,6 +4,10 @@
   --scrollbar-border-radius: 10px;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;

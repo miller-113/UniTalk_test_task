@@ -27,7 +27,8 @@ const palette = {
     turquoiseChat: '#A0F0F2',
     blueGray: '#607D8B',
     bismark: '#546E7A',
-    red: 'rgba(240, 66, 89, 1)'
+    red: 'rgba(240, 66, 89, 1)',
+    secondary: 'rgba(102, 128, 153, 1)'
   },
   companyBlue: 'rgba(0, 167, 167, 0.2)',
   error: {

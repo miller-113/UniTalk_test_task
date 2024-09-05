@@ -7,10 +7,11 @@ interface AppTypography extends TypographyOptions {
   midTitle: TypographyStyleOptions
   button1: TypographyStyleOptions
   typography: TypographyStyleOptions
+  tableHeader: TypographyStyleOptions
 }
 
 const appTypography: AppTypography = {
-  fontFamily: ['Roboto', '-apple-system', 'Arial', 'sans-serif'].join(','),
+  fontFamily: ['Rubik', '-apple-system', 'Arial', 'sans-serif'].join(','),
   h1: {
     fontWeight: 300,
     fontSize: '96px',
@@ -116,6 +117,13 @@ const appTypography: AppTypography = {
     lineHeight: '20px',
     letterSpacing: '0.5px',
     textTransform: 'initial'
+  },
+  tableHeader: {
+    fontWeight: 500,
+    fontSize: '14px',
+    lineHeight: '24px',
+    letterSpacing: '0.17px',
+    color: 'rgba(41, 36, 36, 1)'
   }
 }
 

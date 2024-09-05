@@ -4,6 +4,14 @@ import { textfieldScrollbar } from '~/styles/app-theme/custom-scrollbar'
 export const textField = {
   styleOverrides: {
     root: {
+      input: {
+        '&::placeholder': {
+          color: 'rgba(41, 36, 36, 1)',
+          opacity: 1
+        }
+      },
+      width: '300px',
+      height: '56px',
       ...textfieldScrollbar,
       '& label': {
         lineHeight: 'inherit',
@@ -15,7 +23,7 @@ export const textField = {
         },
         color: palette.primary[500]
       },
-      '& .MuiAutocomplete-inputRoot.MuiOutlinedInput-root ': {
+      '& .MuiAutocomplete-inputRoot.MuiOutlinedInput-root': {
         padding: '5px'
       },
       '& .MuiInputBase-input': {
@@ -26,16 +34,14 @@ export const textField = {
         '& fieldset': {
           borderColor: palette.primary[500]
         },
-        '&.Mui-focused ': {
-          '&.Mui-error fieldset': {
-            borderColor: palette.error[500]
-          },
-          '& fieldset': {
-            borderColor: palette.primary[900]
-          }
+        '&.Mui-focused fieldset': {
+          borderColor: palette.primary[900]
+        },
+        '&.Mui-error fieldset': {
+          borderColor: palette.error[500]
         }
       },
-      '& .MuiInput-root:before ': {
+      '& .MuiInput-root:before': {
         borderColor: palette.primary[500]
       }
     }
