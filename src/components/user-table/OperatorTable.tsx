@@ -43,6 +43,7 @@ const OperatorTable: React.FC = () => {
 
   const handleSearch = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPage(0)
       setSearchTerm(event.target.value)
     },
     []
