@@ -1,16 +1,12 @@
 import { IListState } from './common.types'
 
-type OperatorAddonsNames = {
-  SMTP?: string
-  JBOD?: string
-}
-
-export type OperatorType = OperatorAddonsNames & {
+export type OperatorType = {
   createdAt: string
   name: string
   avatar: string
   isWorking: boolean
   id: string
+  [key: string]: any
 }
 
 export type OperatorAddonType = {

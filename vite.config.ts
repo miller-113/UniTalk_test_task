@@ -6,7 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import path from 'path'
 
 export default defineConfig({
-  base: '',
+  base: '/UniTalk_test_task',
   plugins: [react(), tsconfigPaths()],
   server: {
     port: 3000,

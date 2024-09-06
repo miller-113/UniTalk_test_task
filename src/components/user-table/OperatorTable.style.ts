@@ -17,12 +17,17 @@ export const styles = {
     width: '177px'
   },
   tableCellOperatorData: {
-    width: '531px',
+    width: '531px'
   },
-  tableCellOperatorDataTypography: {maxWidth: '500px'},
+  tableCellOperatorDataTypography: { maxWidth: '500px' },
   dividerCell: {
     p: 0,
     background: 'rgba(202, 224, 237, 1)'
   },
-  tableCellDate: {}
+  tableCellDate: {
+    minWidth: '230px'
+  },
+  tableCellIsWorking: {
+    minWidth: '177px'
+  }
 }

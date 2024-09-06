@@ -106,7 +106,14 @@ const OperatorTable: React.FC = () => {
     const end = start + rowsPerPage
     return filteredData.slice(start, end)
   }, [filteredData, page, rowsPerPage])
-
+  
+  const uppercaseOperatorsKeys = () => {
+    if (data){
+      return Object.keys(data[0]).filter(([key]) =>
+        key === key.toUpperCase())
+    }
+  }
+  
   if (isLoading) return <div>Loading...</div>
   if (errors) return <div>Error: {JSON.stringify(errors)}</div>
 
@@ -136,7 +143,7 @@ const OperatorTable: React.FC = () => {
                   <Typography variant='tableHeader'>Користувач</Typography>
                 </TableSortLabel>
               </TableCell>
-              <TableCell sx={{ width: '177px' }}>
+              <TableCell sx={styles.tableCellIsWorking}>
                 <TableSortLabel
                   active={sortConfig.key === 'isWorking'}
                   direction={sortConfig.direction}
@@ -145,7 +152,7 @@ const OperatorTable: React.FC = () => {
                   <Typography variant='tableHeader'>Працює</Typography>
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
+              <TableCell sx={styles.tableCellDate}>
                 <TableSortLabel
                   active={sortConfig.key === 'createdAt'}
                   direction={sortConfig.direction}
@@ -156,9 +163,13 @@ const OperatorTable: React.FC = () => {
                   </Typography>
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
-                <Typography variant='tableHeader'>SMTP</Typography>
-              </TableCell>
+              {uppercaseOperatorsKeys()?.map((operatorAddonName) => (
+                <TableCell key={operatorAddonName}>
+                  <Typography variant='tableHeader'>
+                    {operatorAddonName}
+                  </Typography>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -189,18 +200,27 @@ const OperatorTable: React.FC = () => {
                   </TableCell>
                   <TableCell sx={styles.tableCellDate}>
                     <Typography variant='body2'>
-                      {new Date(operator.createdAt).toLocaleString()}
+                      {new Date(operator.createdAt).toLocaleDateString('ru-RU')}{' '}
+                      {new Date(operator.createdAt).toLocaleTimeString(
+                        'ru-RU',
+                        { hour: '2-digit', minute: '2-digit' }
+                      )}
                     </Typography>
                   </TableCell>
-                  <TableCell sx={styles.tableCellOperatorData}>
-                    <Typography
-                      noWrap
-                      sx={styles.tableCellOperatorDataTypography}
-                      variant='body2'
+                  {uppercaseOperatorsKeys()?.map((operatorAddonName) => (
+                    <TableCell
+                      sx={styles.tableCellOperatorData}
+                      key={operatorAddonName}
                     >
-                      {operator.SMTP}
-                    </Typography>
-                  </TableCell>
+                      <Typography
+                        noWrap
+                        sx={styles.tableCellOperatorDataTypography}
+                        variant='body2'
+                      >
+                        {operator[operatorAddonName]}
+                      </Typography>
+                    </TableCell>
+                  ))}
                 </TableRow>
               </React.Fragment>
             ))}
