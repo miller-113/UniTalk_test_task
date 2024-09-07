@@ -1,7 +1,7 @@
 import React from 'react'
 import { TableCell, Typography, Avatar, Checkbox } from '@mui/material'
 
-import { styles } from '~/components/operator-table/OperatorTable.style'
+import { styles } from '~/components/tbody-cell/TbodyCell.style'
 
 import { TbodyCellProps } from '~/types'
 

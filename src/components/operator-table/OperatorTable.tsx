@@ -14,11 +14,13 @@ import {
   Divider,
   TablePagination
 } from '@mui/material'
+import TbodyCell from '~/components/tbody-cell/TbodyCell'
+
 import { useHandlers } from '~/hooks/table/useHandlers'
 import useUsers from '~/hooks/table/useUsers'
-import { getAllHeadCells } from './lib'
-import { styles } from './OperatorTable.style'
-import TbodyCell from '~/components/tbody-cell/TbodyCell'
+
+import { getAllHeadCells } from '~/components/operator-table/lib'
+import { styles } from '~/components/operator-table/OperatorTable.style'
 
 import { OperatorType } from '~/types'
 
@@ -90,6 +92,7 @@ const OperatorTable: React.FC = () => {
               ))}
             </TableRow>
           </TableHead>
+          
           <TableBody>
             {paginatedData.map((operator, index) => (
               <React.Fragment key={operator.id}>
