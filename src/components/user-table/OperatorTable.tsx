@@ -19,7 +19,8 @@ import {
 } from '@mui/material'
 import { getOperatorListAction } from '~/store/slices/users.slice'
 import { RootState } from '~/store'
-import { OperatorType, SortConfig } from '~/types'
+import { SortConfig } from '~/types'
+import { useHandlers } from '~/hooks/table/useHandlers'
 
 import { styles } from './OperatorTable.style'
 
@@ -41,6 +42,12 @@ const OperatorTable: React.FC = () => {
     dispatch(getOperatorListAction())
   }, [dispatch])
 
+  const { handleSort, handlePageChange, handleRowsPerPageChange } = useHandlers(
+    setSortConfig,
+    setPage,
+    setRowsPerPage
+  )
+
   const handleSearch = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setPage(0)
@@ -49,32 +56,11 @@ const OperatorTable: React.FC = () => {
     []
   )
 
-  const handleSort = useCallback((key: keyof OperatorType) => {
-    setSortConfig((prevConfig) => ({
-      key,
-      direction:
-        prevConfig.key === key && prevConfig.direction === 'asc'
-          ? 'desc'
-          : 'asc'
-    }))
-  }, [])
-
-  const handlePageChange = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    setPage(newPage)
-  }
-
-  const handleRowsPerPageChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
-
   const sortedData = useMemo(() => {
     if (!data) return null
 
     const { key, direction } = sortConfig
-    return data.sort((a, b) => {
+    return [...data].sort((a, b) => {
       if (key === 'isWorking') {
         return direction === 'asc'
           ? Number(a[key]) - Number(b[key])
@@ -107,14 +93,13 @@ const OperatorTable: React.FC = () => {
     const end = start + rowsPerPage
     return filteredData.slice(start, end)
   }, [filteredData, page, rowsPerPage])
-  
+
   const uppercaseOperatorsKeys = () => {
-    if (data){
-      return Object.keys(data[0]).filter(([key]) =>
-        key === key.toUpperCase())
+    if (data) {
+      return Object.keys(data[0]).filter((key) => key === key.toUpperCase())
     }
   }
-  
+
   if (isLoading) return <div>Loading...</div>
   if (errors) return <div>Error: {JSON.stringify(errors)}</div>
 
