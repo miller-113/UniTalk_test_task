@@ -7,8 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Avatar,
-  Checkbox,
   TextField,
   Box,
   TableSortLabel,
@@ -20,9 +18,9 @@ import {
 import { useHandlers } from '~/hooks/table/useHandlers'
 import useUsers from '~/hooks/table/useUsers'
 import { getAllHeadCells } from './lib'
-
 import { styles } from './OperatorTable.style'
 import { OperatorType } from '~/types'
+import TbodyCell from '~/components/tbody-cell/TbodyCell'
 
 const OperatorTable: React.FC = () => {
   const {
@@ -106,43 +104,38 @@ const OperatorTable: React.FC = () => {
                   </TableRow>
                 )}
                 <TableRow>
-                  <TableCell sx={styles.tableCellIndex}>
-                    <Typography
-                      sx={styles.tableCellTypographyIndex}
-                      variant='body2'
-                    >
-                      {page * rowsPerPage + index + 1}
-                    </Typography>
-                  </TableCell>
-                  <TableCell sx={styles.avatarTableCell}>
-                    <Avatar src={operator.avatar} />
-                    <Typography variant='body2'>{operator.name}</Typography>
-                  </TableCell>
-                  <TableCell sx={styles.tableCellName}>
-                    <Checkbox checked={operator.isWorking} />
-                  </TableCell>
-                  <TableCell sx={styles.tableCellDate}>
-                    <Typography variant='body2'>
-                      {new Date(operator.createdAt).toLocaleDateString('ru-RU')}{' '}
-                      {new Date(operator.createdAt).toLocaleTimeString(
-                        'ru-RU',
-                        { hour: '2-digit', minute: '2-digit' }
-                      )}
-                    </Typography>
-                  </TableCell>
+                  <TbodyCell
+                    type='index'
+                    value={page * rowsPerPage + index + 1}
+                    operator={operator}
+                    dynamicKeys={dynamicKeys}
+                  />
+                  <TbodyCell
+                    type='avatar'
+                    value={null}
+                    operator={operator}
+                    dynamicKeys={dynamicKeys}
+                  />
+                  <TbodyCell
+                    type='isWorking'
+                    value={null}
+                    operator={operator}
+                    dynamicKeys={dynamicKeys}
+                  />
+                  <TbodyCell
+                    type='createdAt'
+                    value={null}
+                    operator={operator}
+                    dynamicKeys={dynamicKeys}
+                  />
                   {dynamicKeys.map((operatorAddonName) => (
-                    <TableCell
-                      sx={styles.tableCellOperatorData}
+                    <TbodyCell
                       key={operatorAddonName}
-                    >
-                      <Typography
-                        noWrap
-                        sx={styles.tableCellOperatorDataTypography}
-                        variant='body2'
-                      >
-                        {operator[operatorAddonName]}
-                      </Typography>
-                    </TableCell>
+                      type={operatorAddonName}
+                      value={null}
+                      operator={operator}
+                      dynamicKeys={dynamicKeys}
+                    />
                   ))}
                 </TableRow>
               </React.Fragment>
@@ -151,7 +144,6 @@ const OperatorTable: React.FC = () => {
         </Table>
       </TableContainer>
       <Divider sx={styles.dividerCell} />
-
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}
         component='div'

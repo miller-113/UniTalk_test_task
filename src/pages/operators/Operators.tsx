@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material"
 import { styles } from "./Operators.style"
-import OperatorTable from "~/components/user-table/OperatorTable"
+import OperatorTable from "~/components/operator-table/OperatorTable"
 
 const Operators = () => {
   return (
