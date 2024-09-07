@@ -74,7 +74,7 @@ const OperatorTable: React.FC = () => {
     if (!data) return null
 
     const { key, direction } = sortConfig
-    return [...data].sort((a, b) => {
+    return data.sort((a, b) => {
       if (key === 'isWorking') {
         return direction === 'asc'
           ? Number(a[key]) - Number(b[key])
