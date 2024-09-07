@@ -16,10 +16,13 @@ import {
   Divider,
   TablePagination
 } from '@mui/material'
+
 import { useHandlers } from '~/hooks/table/useHandlers'
 import useUsers from '~/hooks/table/useUsers'
+import { getAllHeadCells } from './lib'
 
 import { styles } from './OperatorTable.style'
+import { OperatorType } from '~/types'
 
 const OperatorTable: React.FC = () => {
   const {
@@ -44,6 +47,9 @@ const OperatorTable: React.FC = () => {
     setRowsPerPage
   )
 
+  const dynamicKeys = uppercaseOperatorsKeys() || []
+  const allHeadCells = getAllHeadCells(dynamicKeys)
+
   if (isLoading) return <div>Loading...</div>
   if (errors) return <div>Error: {JSON.stringify(errors)}</div>
 
@@ -63,41 +69,25 @@ const OperatorTable: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={sortConfig.key === 'name'}
-                  direction={sortConfig.direction}
-                  onClick={() => handleSort('name')}
-                >
-                  <Typography variant='tableHeader'>Користувач</Typography>
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sx={styles.tableCellIsWorking}>
-                <TableSortLabel
-                  active={sortConfig.key === 'isWorking'}
-                  direction={sortConfig.direction}
-                  onClick={() => handleSort('isWorking')}
-                >
-                  <Typography variant='tableHeader'>Працює</Typography>
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sx={styles.tableCellDate}>
-                <TableSortLabel
-                  active={sortConfig.key === 'createdAt'}
-                  direction={sortConfig.direction}
-                  onClick={() => handleSort('createdAt')}
-                >
-                  <Typography variant='tableHeader'>
-                    Дата / Час створення
-                  </Typography>
-                </TableSortLabel>
-              </TableCell>
-              {uppercaseOperatorsKeys()?.map((operatorAddonName) => (
-                <TableCell key={operatorAddonName}>
-                  <Typography variant='tableHeader'>
-                    {operatorAddonName}
-                  </Typography>
+              {allHeadCells.map((headCell) => (
+                <TableCell key={headCell.id} sx={headCell.style}>
+                  {headCell.isSortable ? (
+                    <TableSortLabel
+                      active={sortConfig.key === headCell.id}
+                      direction={sortConfig.direction}
+                      onClick={() =>
+                        handleSort(headCell.id as keyof OperatorType)
+                      }
+                    >
+                      <Typography variant='tableHeader'>
+                        {headCell.label}
+                      </Typography>
+                    </TableSortLabel>
+                  ) : (
+                    <Typography variant='tableHeader'>
+                      {headCell.label}
+                    </Typography>
+                  )}
                 </TableCell>
               ))}
             </TableRow>
@@ -107,7 +97,10 @@ const OperatorTable: React.FC = () => {
               <React.Fragment key={operator.id}>
                 {index > 0 && (
                   <TableRow>
-                    <TableCell sx={styles.dividerCell} colSpan={5}>
+                    <TableCell
+                      sx={styles.dividerCell}
+                      colSpan={allHeadCells.length}
+                    >
                       <Divider />
                     </TableCell>
                   </TableRow>
@@ -137,7 +130,7 @@ const OperatorTable: React.FC = () => {
                       )}
                     </Typography>
                   </TableCell>
-                  {uppercaseOperatorsKeys()?.map((operatorAddonName) => (
+                  {dynamicKeys.map((operatorAddonName) => (
                     <TableCell
                       sx={styles.tableCellOperatorData}
                       key={operatorAddonName}
