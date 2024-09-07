@@ -14,13 +14,13 @@ import {
   Divider,
   TablePagination
 } from '@mui/material'
-
 import { useHandlers } from '~/hooks/table/useHandlers'
 import useUsers from '~/hooks/table/useUsers'
 import { getAllHeadCells } from './lib'
 import { styles } from './OperatorTable.style'
-import { OperatorType } from '~/types'
 import TbodyCell from '~/components/tbody-cell/TbodyCell'
+
+import { OperatorType } from '~/types'
 
 const OperatorTable: React.FC = () => {
   const {
@@ -104,35 +104,11 @@ const OperatorTable: React.FC = () => {
                   </TableRow>
                 )}
                 <TableRow>
-                  <TbodyCell
-                    type='index'
-                    value={page * rowsPerPage + index + 1}
-                    operator={operator}
-                    dynamicKeys={dynamicKeys}
-                  />
-                  <TbodyCell
-                    type='avatar'
-                    value={null}
-                    operator={operator}
-                    dynamicKeys={dynamicKeys}
-                  />
-                  <TbodyCell
-                    type='isWorking'
-                    value={null}
-                    operator={operator}
-                    dynamicKeys={dynamicKeys}
-                  />
-                  <TbodyCell
-                    type='createdAt'
-                    value={null}
-                    operator={operator}
-                    dynamicKeys={dynamicKeys}
-                  />
-                  {dynamicKeys.map((operatorAddonName) => (
+                  {allHeadCells.map((headCell) => (
                     <TbodyCell
-                      key={operatorAddonName}
-                      type={operatorAddonName}
-                      value={null}
+                      key={headCell.id}
+                      type={headCell.id}
+                      value={page * rowsPerPage + index + 1}
                       operator={operator}
                       dynamicKeys={dynamicKeys}
                     />
@@ -143,6 +119,7 @@ const OperatorTable: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      
       <Divider sx={styles.dividerCell} />
       <TablePagination
         rowsPerPageOptions={[5, 10, 20]}

@@ -46,7 +46,7 @@ const TbodyCell: React.FC<TbodyCellProps> = ({
         </TableCell>
       )
     default:
-      if (dynamicKeys.includes(type)) {
+      if (dynamicKeys.includes(type as string)) {
         return (
           <TableCell sx={styles.tableCellOperatorData} key={type}>
             <Typography

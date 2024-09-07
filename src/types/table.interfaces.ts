@@ -8,8 +8,8 @@ export interface HeadCell {
 }
 
 export interface TbodyCellProps {
-  type: string
-  value: any
+  type: HeadCell['id']
+  value: number
   operator: OperatorType
   dynamicKeys: string[]
 }
