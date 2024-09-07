@@ -1,16 +1,17 @@
-import { OperatorType } from '~/types'
+import { HeadCell } from '~/types'
 import { styles } from './OperatorTable.style'
 
-export interface HeadCell {
-  id: keyof OperatorType | string
-  label: string
-  isSortable: boolean
-  style?: React.CSSProperties
-}
-
 export const headCells: readonly HeadCell[] = [
-  { id: 'index', label: '#', isSortable: false },
-  { id: 'name', label: 'Користувач', isSortable: true },
+  {
+    id: 'index',
+    label: '#',
+    isSortable: false
+  },
+  {
+    id: 'name',
+    label: 'Користувач',
+    isSortable: true
+  },
   {
     id: 'isWorking',
     label: 'Працює',
