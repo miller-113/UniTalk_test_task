@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
 import {
   Table,
   TableBody,
@@ -17,88 +16,33 @@ import {
   Divider,
   TablePagination
 } from '@mui/material'
-import { getOperatorListAction } from '~/store/slices/users.slice'
-import { RootState } from '~/store'
-import { SortConfig } from '~/types'
 import { useHandlers } from '~/hooks/table/useHandlers'
+import useUsers from '~/hooks/table/useUsers'
 
 import { styles } from './OperatorTable.style'
 
 const OperatorTable: React.FC = () => {
-  const dispatch = useDispatch()
-  const { data, isLoading, errors } = useSelector(
-    (state: RootState) => state.users.list
-  )
-
-  const [searchTerm, setSearchTerm] = useState<string>('')
-  const [sortConfig, setSortConfig] = useState<SortConfig>({
-    key: 'name',
-    direction: 'asc'
-  })
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-
-  useEffect(() => {
-    dispatch(getOperatorListAction())
-  }, [dispatch])
+  const {
+    isLoading,
+    errors,
+    searchTerm,
+    sortConfig,
+    setSortConfig,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    handleSearch,
+    filteredData,
+    paginatedData,
+    uppercaseOperatorsKeys
+  } = useUsers()
 
   const { handleSort, handlePageChange, handleRowsPerPageChange } = useHandlers(
     setSortConfig,
     setPage,
     setRowsPerPage
   )
-
-  const handleSearch = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPage(0)
-      setSearchTerm(event.target.value)
-    },
-    []
-  )
-
-  const sortedData = useMemo(() => {
-    if (!data) return null
-
-    const { key, direction } = sortConfig
-    return [...data].sort((a, b) => {
-      if (key === 'isWorking') {
-        return direction === 'asc'
-          ? Number(a[key]) - Number(b[key])
-          : Number(b[key]) - Number(a[key])
-      } else if (key === 'createdAt') {
-        return direction === 'asc'
-          ? new Date(a[key]).getTime() - new Date(b[key]).getTime()
-          : new Date(b[key]).getTime() - new Date(a[key]).getTime()
-      } else {
-        const aValue = String(a[key])
-        const bValue = String(b[key])
-        if (aValue < bValue) return direction === 'asc' ? -1 : 1
-        if (aValue > bValue) return direction === 'asc' ? 1 : -1
-        return 0
-      }
-    })
-  }, [data, sortConfig])
-
-  const filteredData = useMemo(() => {
-    if (!sortedData) return null
-
-    return sortedData.filter((operator) =>
-      operator.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  }, [sortedData, searchTerm])
-
-  const paginatedData = useMemo(() => {
-    if (!filteredData) return []
-    const start = page * rowsPerPage
-    const end = start + rowsPerPage
-    return filteredData.slice(start, end)
-  }, [filteredData, page, rowsPerPage])
-
-  const uppercaseOperatorsKeys = () => {
-    if (data) {
-      return Object.keys(data[0]).filter((key) => key === key.toUpperCase())
-    }
-  }
 
   if (isLoading) return <div>Loading...</div>
   if (errors) return <div>Error: {JSON.stringify(errors)}</div>
