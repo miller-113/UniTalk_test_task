@@ -59,7 +59,7 @@ const OperatorTable: React.FC = () => {
     }))
   }, [])
 
-  const handlePageChange = (event: unknown, newPage: number) => {
+  const handlePageChange = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage)
   }
 
